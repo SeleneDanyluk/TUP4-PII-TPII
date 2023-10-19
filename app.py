@@ -1,0 +1,1 @@
+cursos_disponibles = [#crear listado de cursos disponibles para mostrar al usuario]
