@@ -1,7 +1,5 @@
 from usuario import Usuario
 
-
-
 class Estudiante(Usuario):
     def __init__(self, nombre: str, apellido: str, email: str, contrasenia: str, legajo: int, anio_inscripcion_carrera: int) -> None:
         super().__init__(nombre, apellido, email, contrasenia)
@@ -26,13 +24,9 @@ class Estudiante(Usuario):
         self.__anio_inscripcion_carrera = nuevo_anio_inscripcion
 
     @property
-    def cursos(self):
+    def cursos(self) -> list:
         return self.__cursos
     
-    @cursos.setter
-    def cursos(self, nuevo_curso):
-        self.__cursos = nuevo_curso
-
     def __str__(self) -> str:
         return self.nombre
 

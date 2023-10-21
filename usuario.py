@@ -40,10 +40,10 @@ class Usuario(ABC):
     def contrasenia(self, nueva_contrasenia):
         self._contrasenia = nueva_contrasenia
 
-    @classmethod
     def validar_credenciales(self, email_ingresado: str, contrasenia_ingresada: str) -> bool:
         return self.email == email_ingresado and self.contrasenia == contrasenia_ingresada
 
     @abstractmethod
     def __str__(self) -> str:
         raise NotImplementedError
+    
