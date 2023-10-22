@@ -27,7 +27,9 @@ class Profesor(Usuario):
     def mis_cursos(self):
         return self.__mis_cursos
     
+    def __str__(self) -> str:
+        return f"El profesor es: {self.nombre}"
+    
     def dictar_curso(self, curso) -> None:
         self.mis_cursos.append(curso)
     
-#las listas no necesitan de un setter, se realiza con el append

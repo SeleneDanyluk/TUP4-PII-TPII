@@ -5,7 +5,7 @@ class Estudiante(Usuario):
         super().__init__(nombre, apellido, email, contrasenia)
         self.__legajo = legajo
         self.__anio_inscripcion_carrera = anio_inscripcion_carrera
-        self.__cursos = []
+        self.__mis_cursos = []
 
     @property
     def legajo(self):
@@ -24,11 +24,11 @@ class Estudiante(Usuario):
         self.__anio_inscripcion_carrera = nuevo_anio_inscripcion
 
     @property
-    def cursos(self) -> list:
-        return self.__cursos
+    def mis_cursos(self) -> list:
+        return self.__mis_cursos
     
     def __str__(self) -> str:
         return self.nombre
 
     def matricular_en_curso(self, curso) -> None:
-        self.cursos.append(curso)
+        self.mis_cursos.append(curso)
