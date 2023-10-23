@@ -25,5 +25,3 @@ class Curso:
     def __generar_contrasenia(cls) -> str:
         password = string.ascii_uppercase + string.ascii_lowercase + string.digits
         return ''.join(random.choice(password) for i in range(7))
-    
-    
