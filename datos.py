@@ -1,6 +1,6 @@
 from estudiante import Estudiante
 from profesor import Profesor
-from curso import Curso
+# from curso import Curso
 
 estudiantes = [
     Estudiante("Jose", "Perez", "joseperez@gmail.com", "josesito1234", 54789, 2022), 
@@ -15,10 +15,10 @@ profesores = [
 ]
 
 cursos = [
-    Curso("Ingles I"),
-    Curso("Ingles II"),
-    Curso("Laboratorio I"),
-    Curso("Laboratorio II"),
-    Curso("Programacion I"),
-    Curso("Programacion II")
+    # Curso("Ingles I"),
+    # Curso("Ingles II"),
+    # Curso("Laboratorio I"),
+    # Curso("Laboratorio II"),
+    # Curso("Programacion I"),
+    # Curso("Programacion II")
 ]

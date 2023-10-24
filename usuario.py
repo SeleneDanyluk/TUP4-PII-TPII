@@ -2,7 +2,25 @@ from abc import ABC, abstractmethod
 
 
 class Usuario(ABC):
+    """
+    Clase abstracta que describe los atributos y métodos necesarios de un usuario.
+
+    Atributos:
+        _nombre(str): Nombre del usuario.
+        _apellido(str): Apellido del usuario.
+        _email(str): Email del usuario.
+        _contrasenia(str): contrasenia del usuario.
+    """
     def __init__(self, nombre: str, apellido: str, email: str, contrasenia: str) -> None:
+        """
+        La función __init__ iniciliza una referencia a la clase Usuario.
+
+        Args:
+            nombre(str): Nombre del usuario.
+            apellido(str): Apellido del usuario.
+            email(str): Email del usuario.
+            contrasenia(str): contrasenia del usuario.
+        """
         self._nombre = nombre
         self._apellido = apellido
         self._email = email
@@ -41,6 +59,16 @@ class Usuario(ABC):
         self._contrasenia = nueva_contrasenia
 
     def validar_credenciales(self, email_ingresado: str, contrasenia_ingresada: str) -> bool:
+        """
+        Valida que las credenciales dadas sean las correctas.
+
+        Args:
+            email_ingresado(str): email ingresado.
+            contrasenia_ingresada(str): contrasenia ingresada.
+
+        Returns:
+            (bool): True si las credenciales dadas son correctas, False en caso contrario.
+        """
         return self.email == email_ingresado and self.contrasenia == contrasenia_ingresada
 
     @abstractmethod

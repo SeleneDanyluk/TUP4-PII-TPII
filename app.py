@@ -2,8 +2,11 @@ import os
 from datos import estudiantes, profesores, cursos
 from profesor import Profesor
 from curso import Curso
+from typing import Union
+from usuario import Usuario
+from estudiante import Estudiante
 
-#-----------------------------------------------Funciones------------------------------------------------------
+#  -----------------------------------------------Funciones------------------------------------------------------
 
 
 def mensaje_bienvenida():
@@ -29,7 +32,16 @@ def subMenu_profesor():
     print("3. Volver al menú principal")
 
 
-def ingreso_credenciales(usuarios):
+def ingreso_credenciales(usuarios: list) -> Union[bool, Usuario]:
+    """Valida el ingreso de email y luego de la contraseña:
+     Args:
+        Usuarios(list[Usuario]): Lista de usuarios registrados.
+
+    Returns:
+        Union[True, Usuario]: Las credenciales ingresadas son validas.
+        Union[False, Usuario]: La contraseña ingresada es incorrecta, muestra mensaje de error.
+    """
+
     email = input("Ingrese su email: ")
     for usuario in usuarios:
         if usuario.email == email:
@@ -44,13 +56,29 @@ def ingreso_credenciales(usuarios):
     return False, usuario
 
 
-def ver_curso(usuario, curso):
+def ver_curso(usuario: object, curso: Curso):
+    """Muestra el nombre del curso si el usuario es alumno y nombre y contraseña si el usuario es Profesor :
+     Args:
+        Usuario: Objeto usuario (Profesor / Estudiante).
+
+    Returns:
+        None
+    """
     print(f"Nombre: {curso.nombre}")
     if isinstance(usuario, Profesor):
         print(f"Contraseña: {curso.contrasenia_matriculacion}")
 
 
-def listar_cursos(cursos, mensaje):
+def listar_cursos(cursos: list, mensaje: str) -> Curso:
+    """Muestra un listado de los cursos y solicita el ingreso del número correspondiente a uno de ellos:
+     Args:
+        Cursos: Lista de cursos.
+        Mensaje: Para matricularse en un curso o para visualizarlo segun el usuario.
+    Returns:
+        Curso: Devuelve un curso en caso de que existan
+
+        None: En caso de no existir cursos
+    """
     cursos_disponibles = {}
     if len(cursos) != 0:
         for i, curso in enumerate(cursos, 1):
@@ -67,7 +95,37 @@ def listar_cursos(cursos, mensaje):
         return None
 
 
-def matricularse_curso(estudiante):
+def mostrar_cursos(usuario: object):
+    """Muestra un listado de los cursos en los que se encuentra el usuario y luego imprime la opcion deseada :
+     Args:
+        Usuario: Objeto usuario (Profesor / Estudiante).
+
+    Returns:
+        None
+    """
+    curso_seleccionado = listar_cursos(usuario.mis_cursos, "Ingrese la opción correspondiente para ver más información: ")
+    if curso_seleccionado is not None:
+        ver_curso(usuario, curso_seleccionado)
+    else:
+        print("No hay cursos cargados.")
+
+
+def esta_matriculado(estudiante: Estudiante, curso: Curso) -> bool:
+    for curso_estudiante in estudiante.mis_cursos:
+        if curso_estudiante == curso:
+            print("Usted ya se encuentra matriculado en este curso.")
+            return True
+    return False
+
+
+def matricularse_curso(estudiante: Estudiante):
+    """Llama a la función listar cursos y solicita el ingreso de una opción si hay cursos disponibles. Solicita la contraseña correspondiente y la valida:
+     Args:
+        Usuario: Objeto Estudiante.
+
+    Returns:
+        None
+    """
     curso_seleccionado = listar_cursos(cursos, "Ingrese el curso que quiere matricularse: ")
     if curso_seleccionado is not None:
         if esta_matriculado(estudiante, curso_seleccionado):
@@ -82,15 +140,14 @@ def matricularse_curso(estudiante):
         print("No hay cursos cargados.")
 
 
-def esta_matriculado(estudiante, curso) -> bool:
-    for curso_estudiante in estudiante.mis_cursos:
-        if curso_estudiante == curso:
-            print("Usted ya se encuentra matriculado en este curso.")
-            return True
-    return False
+def dictar_nuevo_curso(profesor: Profesor):
+    """Solicita un nombre para el curso a dictar y lo agrega a la lista de cursos general y los que dicta el profesor. Llama a la función ver_curso para imprimir los datos:
+     Args:
+        Usuario: Objeto Profesor.
 
-
-def dictar_nuevo_curso(profesor):
+    Returns:
+        None
+    """
     nombre_curso = input("Ingrese el nombre del curso que desea dictar: ")
     # Ver si es numero
     curso = Curso(nombre_curso)
@@ -100,15 +157,12 @@ def dictar_nuevo_curso(profesor):
     ver_curso(profesor, curso)
 
 
-def mostrar_cursos(usuario):
-    curso_seleccionado = listar_cursos(usuario.mis_cursos, "Ingrese el curso que quiere visualizar: ")
-    if curso_seleccionado is not None:
-        ver_curso(usuario, curso_seleccionado)
-    else:
-        print("No hay cursos cargados.")
-
-
 def ver_cursos_alfabeticamente():
+    """Verifica que existan cursos y los imprime por orden alfabeticamente:
+
+    Returns:
+        None
+    """
     if len(cursos)>= 1:
         cursos_ordenados = sorted(cursos, key=lambda curso: curso.nombre)
         for curso in cursos_ordenados:
@@ -119,7 +173,14 @@ def ver_cursos_alfabeticamente():
 #  -----------------------------------------------Alumno------------------------------------------------------
 
 
-def ingreso_alumno(estudiante):
+def ingreso_alumno(estudiante: Estudiante):
+    """Muestra el submenu del alumno y solicita el ingreso de una opción para operar dentro del campo:
+     Args:
+        Usuario: Objeto Estudiante.
+
+    Returns:
+        None
+    """
     respuesta = ''
     while respuesta != "salir":
         subMenu_alumno()
@@ -141,12 +202,19 @@ def ingreso_alumno(estudiante):
 #  -----------------------------------------------Profesor------------------------------------------------------
 
 
-def ingreso_profesor(profesor):
+def ingreso_profesor(profesor: Profesor):
+    """Muestra el submenu del profesor y solicita el ingreso de una opción para operar dentro del campo:
+     Args:
+        Usuario: Objeto Profesor.
+
+    Returns:
+        None
+    """
     respuesta = ''
     while respuesta != "salir":
         subMenu_profesor()
-        opt_profesor = input("\n Ingrese la opción de menú: ")
-        os.system ("cls")
+        opt_profesor = input("\nIngrese la opción de menú: ")
+        os.system("cls")
         if opt_profesor.isnumeric():
             if int(opt_profesor) == 1:
                 dictar_nuevo_curso(profesor)
@@ -191,16 +259,3 @@ while respuesta != "salir":
     input("Presione cualquier tecla para continuar....")  # Pausa
 
 print("Hasta luego!.")
-
-
-
-
-
-
-
-
-
-
-
-
-
