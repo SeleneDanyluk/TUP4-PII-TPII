@@ -1,5 +1,6 @@
 from usuario import Usuario
 from curso import Curso
+from carrera import Carrera
 
 
 class Estudiante(Usuario):
@@ -14,7 +15,7 @@ class Estudiante(Usuario):
         __anio_inscripcion_carrera(int): anio en que el estudiante se inscribio a la carrera.
         __mis_cursos(list[Curso]): lista de cursos a los que asiste el estudiante.
     """
-    def __init__(self, nombre: str, apellido: str, email: str, contrasenia: str, legajo: int, anio_inscripcion_carrera: int) -> None:
+    def __init__(self, nombre: str, apellido: str, email: str, contrasenia: str, legajo: int, anio_inscripcion_carrera: int, carrera: Carrera) -> None:
         """
         La función __init__ iniciliza una referencia a la clase Estudiante.
 
@@ -30,6 +31,7 @@ class Estudiante(Usuario):
         self.__legajo = legajo
         self.__anio_inscripcion_carrera = anio_inscripcion_carrera
         self.__mis_cursos = []
+        self.__carrera = carrera
 
     @property
     def legajo(self) -> int:
@@ -50,6 +52,14 @@ class Estudiante(Usuario):
     @property
     def mis_cursos(self) -> list:
         return self.__mis_cursos
+    
+    @property
+    def carrera(self):
+        return self.__carrera
+    
+    @carrera.setter
+    def carrera(self, nueva_carrera):
+        self.__carrera = nueva_carrera
 
     def __str__(self) -> str:
         return f"El estudiante es: {self.nombre}"

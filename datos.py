@@ -4,11 +4,6 @@ from carrera import *
 from curso import *
 # from curso import Curso
 
-estudiantes = [
-    Estudiante("Jose", "Perez", "joseperez@gmail.com", "josesito1234", 54789, 2022), 
-    Estudiante("Martin", "Rodriguez", "rodrimartin@gmail.com", "martinsito247", 50234, 2020),
-    Estudiante("Martin", "Rodriguez", "mr@ejemplo.com", "martincho", 50234, 2020)
-]
 
 profesores = [
     Profesor("Jorge", "Ramirez", "jorgeramirez@hotmail.com", "jorgitoalfajor", "Profesorado de Matematicas", 1998), 
@@ -33,3 +28,10 @@ carreras = [
 
 nueva_carrera.materias.append(Curso("Ingles I"))
 nueva_carrera.materias.append(Curso("Programacion I"))
+
+
+estudiantes = [
+    Estudiante("Jose", "Perez", "joseperez@gmail.com", "josesito1234", 54789, 2022, nueva_carrera), 
+    Estudiante("Martin", "Rodriguez", "rodrimartin@gmail.com", "martinsito247", 50234, 2020, nueva_carrera),
+    Estudiante("Martin", "Rodriguez", "mr@ejemplo.com", "martincho", 50234, 2020, nueva_carrera)
+]

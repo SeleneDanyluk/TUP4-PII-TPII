@@ -10,6 +10,8 @@ class Curso:
        __nombre(str): nombre del curso.
        __contrasenia_matriculacion(str): constrasenia de matriculacion al curso.
     """
+    __prox_cod = int(0)
+
     def __init__(self, nombre: str) -> None:
         """
         La función __init__ iniciliza una referencia a la clase Curso.
@@ -43,6 +45,11 @@ class Curso:
 
     def __str__(self) -> str:
         return f"Materia: {self.nombre}"
+    
+    @property
+    def codigo(cls):
+        cls.__prox_cod = cls.__prox_cod + 1
+        return cls.__prox_cod
 
     @classmethod
     def __generar_contrasenia(cls) -> str:
