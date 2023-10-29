@@ -1,5 +1,5 @@
 import os
-from datos import estudiantes, profesores, cursos
+from datos import estudiantes, profesores, cursos, carreras
 from profesor import Profesor
 from curso import Curso
 from typing import Union
@@ -31,6 +31,16 @@ def subMenu_profesor():
     print("2. Ver curso.")
     print("3. Volver al menú principal")
 
+def registrar_profesor():
+    nombre = input("Ingrese nombre")
+    apellido = input("Ingrese apellido")
+    email = input("Ingrese email")
+    password = input("Ingrese contra")
+    titulo = input("Ingrese titulo")
+    anio_egreso = input("ingrese anio egreso")
+
+    profesores.append(Profesor(nombre, apellido, email, password, titulo, anio_egreso))
+
 
 def ingreso_credenciales(usuarios: list) -> Union[bool, Usuario]:
     """Valida el ingreso de email y luego de la contraseña:
@@ -52,7 +62,10 @@ def ingreso_credenciales(usuarios: list) -> Union[bool, Usuario]:
             else:
                 print("La contraseña ingresada es incorrecta")
                 return False, usuario
-    print("El email ingresado no se encuentra registrado, debe registrarse")
+    print("El email ingresado no se encuentra registrado, debe registrarse") #si es profesor ingrese el codigo admin y que llame a la funcion dar de alta prof
+    es_profesor = input("Si es profesor ingrese el dodigo admin para darse de alta, sino presione enter")
+    if es_profesor.lower() == "admin":
+        registrar_profesor()
     return False, usuario
 
 
@@ -163,12 +176,11 @@ def ver_cursos_alfabeticamente():
     Returns:
         None
     """
-    if len(cursos)>= 1:
-        cursos_ordenados = sorted(cursos, key=lambda curso: curso.nombre)
-        for curso in cursos_ordenados:
-            print(f"{curso} - Carrera: Tecnicatura Universitaria en Programación")
-    else:
-        print("Aun no hay cursos disponibles")
+    carreras_ordenadas = sorted(carreras, key=lambda carrera: carrera.nombre)
+    for carrera in carreras_ordenadas:
+        materias_ordenadas = sorted(carrera.materias, key=lambda materia: materia.nombre)
+        for materia in materias_ordenadas:
+            print(f"{materia} - {carrera}")
 
 #  -----------------------------------------------Alumno------------------------------------------------------
 

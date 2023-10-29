@@ -62,3 +62,6 @@ class Estudiante(Usuario):
             curso(Curso): nuevo curso al que asistirá el estudiante.
         """
         self.mis_cursos.append(curso)
+
+    def desmatricular_curso(self, curso: Curso):
+        self.mis_cursos.pop(curso)

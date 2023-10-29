@@ -1,5 +1,7 @@
 from estudiante import Estudiante
 from profesor import Profesor
+from carrera import *
+from curso import *
 # from curso import Curso
 
 estudiantes = [
@@ -22,3 +24,12 @@ cursos = [
     # Curso("Programacion I"),
     # Curso("Programacion II")
 ]
+
+nueva_carrera = Carrera("Tecnicatura Universitaria en Programación", 2)
+
+carreras = [
+    nueva_carrera
+]
+
+nueva_carrera.materias.append(Curso("Ingles I"))
+nueva_carrera.materias.append(Curso("Programacion I"))

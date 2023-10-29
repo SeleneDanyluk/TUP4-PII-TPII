@@ -63,3 +63,4 @@ class Profesor(Usuario):
             curso(Curso): nuevo curso a dictar por el profesor.
         """
         self.mis_cursos.append(curso)
+    
