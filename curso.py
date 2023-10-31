@@ -1,6 +1,6 @@
 import random
 import string
-from archivo import *
+from archivo import Archivo
 
 
 class Curso:
@@ -9,6 +9,7 @@ class Curso:
     Atributos:
        __nombre(str): nombre del curso.
        __contrasenia_matriculacion(str): constrasenia de matriculacion al curso.
+       __archivos(list[Archivo]): Lista de archivos del Curso.
     """
     __prox_cod = int(0)
 
@@ -34,18 +35,18 @@ class Curso:
     @property
     def contrasenia_matriculacion(self) -> str:
         return self.__contrasenia_matriculacion
-    
+
     @property
     def archivos(self):
         return self.__archivos
-    
+
     @archivos.setter
     def archivos(self, nuevo_archivo):
         self.__archivos = nuevo_archivo
 
     def __str__(self) -> str:
         return f"Materia: {self.nombre}"
-    
+
     @property
     def codigo(cls):
         cls.__prox_cod = cls.__prox_cod + 1
@@ -63,4 +64,10 @@ class Curso:
         return ''.join(random.choice(password) for i in range(7))
 
     def nuevo_archivo(self, archivo: Archivo):
+        """
+        Agrega un nuevo archivo a la lista de archivos del curso.
+
+        Args:
+            archivo (Archivo): Archivo que se agregará a la lista.
+        """
         self.archivos.append(archivo)
