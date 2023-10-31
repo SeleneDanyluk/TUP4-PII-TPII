@@ -12,7 +12,7 @@ class Estudiante(Usuario):
         _email(str): Email del estudiante.
         _contrasenia(str): contrasenia del estudiante.
         __legajo(str): legajo del estudiante.
-        __anio_inscripcion_carrera(int): anio en que el estudiante se inscribio a la carrera.
+        __anio_inscripcion_carrera(int): anio en que el estudiante se inscribió a la carrera.
         __mis_cursos(list[Curso]): lista de cursos a los que asiste el estudiante.
     """
     def __init__(self, nombre: str, apellido: str, email: str, contrasenia: str, legajo: int, anio_inscripcion_carrera: int, carrera: Carrera) -> None:
@@ -26,6 +26,7 @@ class Estudiante(Usuario):
             contrasenia(str): contrasenia del estudiante.
             legajo(str): legajo del estudiante.
             anio_inscripcion_carrera(int): anio en que el estudiante se inscribio a la carrera.
+            carrera(Carrera): Carrera en la que se encuentra inscripto el Estudiante.
         """
         super().__init__(nombre, apellido, email, contrasenia)
         self.__legajo = legajo
@@ -52,11 +53,11 @@ class Estudiante(Usuario):
     @property
     def mis_cursos(self) -> list:
         return self.__mis_cursos
-    
+
     @property
     def carrera(self):
         return self.__carrera
-    
+
     @carrera.setter
     def carrera(self, nueva_carrera):
         self.__carrera = nueva_carrera
@@ -74,4 +75,10 @@ class Estudiante(Usuario):
         self.mis_cursos.append(curso)
 
     def desmatricular_curso(self, curso: Curso):
+        """
+        Quitar un curso de la lista de cursos del estudiante.
+
+        Args:
+            curso(Curso): curso del cual se desmatriculará el estudiante.
+        """
         self.mis_cursos.remove(curso)
