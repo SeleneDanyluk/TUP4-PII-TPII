@@ -8,7 +8,7 @@ class Carrera:
     @property
     def nombre(self) -> str:
         return self.__nombre
-    
+
     @nombre.setter
     def nombre(self, nuevo_nombre: str):
         self.__nombre = nuevo_nombre
@@ -16,7 +16,7 @@ class Carrera:
     @property
     def cant_anios(self) -> int:
         return self.__cant_anios
-    
+
     @cant_anios.setter
     def cant_anios(self, nueva_cant_anios: int):
         self.__cant_anios = nueva_cant_anios
@@ -24,14 +24,14 @@ class Carrera:
     @property
     def materias(self) -> list:
         return self.__materias
-    
+
     @materias.setter
     def materias(self, nueva_materia: list):
         self.__materias = nueva_materia
 
     def __str__(self) -> str:
         return f"Carrera: {self.nombre}"
-    
+
     def get_cantidad_materias(self) -> int:
         """Calcula la cantidad de materias que tiene la materia:
     """

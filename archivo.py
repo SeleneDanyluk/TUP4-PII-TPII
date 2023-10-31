@@ -43,6 +43,5 @@ class Archivo:
     def fecha(self):
         return self.__fecha
 
-
     def __str__(self) -> str:
         return f"{self.nombre}.{self.formato}"

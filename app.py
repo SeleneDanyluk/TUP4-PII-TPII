@@ -53,11 +53,12 @@ def ingreso_credenciales(usuarios: list) -> Union[bool, Usuario]:
             else:
                 print("La contraseña ingresada es incorrecta")
                 return False, usuario
-    print("El email ingresado no se encuentra registrado, debe registrarse") #si es profesor ingrese el codigo admin y que llame a la funcion dar de alta prof
+    print("El email ingresado no se encuentra registrado, debe registrarse")
     es_profesor = input("Si es profesor ingrese el código admin para darse de alta, de lo contrario presione enter: ")
     if es_profesor.lower() == "admin":
         registrar_profesor()
     return False, usuario
+
 
 def ver_archivos(curso: Curso):
     """Muestra los archivos del curso seleccionado de existir alguno :
@@ -71,15 +72,21 @@ def ver_archivos(curso: Curso):
         for archivo in sorted(curso.archivos, key=lambda archivo: archivo.fecha):
             print(archivo)
 
+
 def registrar_profesor():
-    """Solicita el ingreso de datos del profesor y agrega el objeto a la lista de profesores :
+    """Solicita el ingreso de datos del profesor y agrega el objeto a la lista de profesores:
 
     Returns:
         None
     """
+
     nombre = input("Ingrese su nombre: ")
     apellido = input("Ingrese su apellido: ")
     email = input("Ingrese su email: ")
+    for profesor in profesores:
+        if profesor.email == email:
+            print("El email se encuentra registrado. Presione enter para volver al menu principal.")
+            return
     password = input("Ingrese una contraseña: ")
     titulo = input("Ingrese su título: ")
     anio_egreso = input("ingrese el año de egreso: ")
@@ -108,8 +115,6 @@ def ver_curso(usuario: object, curso: Curso, identificador: int):
         print(f"Contraseña: {curso.contrasenia_matriculacion}")
         if identificador == 2:
             print(f"Cantidad de archivos: {len(curso.archivos)} ")
-
-
 
 
 def listar_cursos(lista: list, mensaje: str) -> Curso: # Modificar esta funcion
@@ -159,7 +164,7 @@ def mostrar_cursos(usuario: object, identificador: int):
 
 def esta_matriculado(estudiante: Estudiante, curso: Curso) -> bool:
     """Evalua si el estudiante esta matriculado en el curso:
-        Args: 
+        Args:
             estudiante(Estudiante): Objeto estudiante.
             curso(Curso): objeto curso.
 
@@ -195,6 +200,7 @@ def matricularse_curso(estudiante: Estudiante):
     else:
         print("No hay cursos cargados.")
 
+
 def desmatricular_curso(estudiante: Estudiante):
     """Lista los cursos llamando a la funcion listar_cursos que devuelve el curso a desmatricularse. De ser asi lo elimina:
      Args:
@@ -209,6 +215,7 @@ def desmatricular_curso(estudiante: Estudiante):
         print("Usted se desmatriculo exitosamente.")
     else:
         print("Usted no posee matriculaciones activas.")
+
 
 def agregar_archivo(curso: Curso):
     """Solicita los datos del archivo y agrega el objeto archivo a la lista de archivos del curso seleccionado:
@@ -225,7 +232,7 @@ def agregar_archivo(curso: Curso):
         curso.nuevo_archivo(nuevo_archivo)
         print(f"Se agrego el archivo: {nuevo_archivo}")
         opt_archivo = input("Desea agregar otro archivo?(S/N)")
-        if opt_archivo.upper() == "N":
+        if opt_archivo.upper() != "S":
             return
 
 
