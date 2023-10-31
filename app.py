@@ -1,5 +1,5 @@
 import os
-from datos import estudiantes, profesores, cursos, carreras
+from datos import estudiantes, profesores, cursos
 from profesor import Profesor
 from curso import Curso
 from typing import Union
@@ -31,16 +31,6 @@ def subMenu_profesor():
     print("2. Ver curso.")
     print("3. Volver al menú principal")
 
-def registrar_profesor():
-    nombre = input("Ingrese nombre")
-    apellido = input("Ingrese apellido")
-    email = input("Ingrese email")
-    password = input("Ingrese contra")
-    titulo = input("Ingrese titulo")
-    anio_egreso = input("ingrese anio egreso")
-
-    profesores.append(Profesor(nombre, apellido, email, password, titulo, anio_egreso))
-
 
 def ingreso_credenciales(usuarios: list) -> Union[bool, Usuario]:
     """Valida el ingreso de email y luego de la contraseña:
@@ -62,14 +52,15 @@ def ingreso_credenciales(usuarios: list) -> Union[bool, Usuario]:
             else:
                 print("La contraseña ingresada es incorrecta")
                 return False, usuario
-    print("El email ingresado no se encuentra registrado, debe registrarse") #si es profesor ingrese el codigo admin y que llame a la funcion dar de alta prof
-    es_profesor = input("Si es profesor ingrese el dodigo admin para darse de alta, sino presione enter")
-    if es_profesor.lower() == "admin":
-        registrar_profesor()
+    print("El email ingresado no se encuentra registrado, debe registrarse")
     return False, usuario
 
+def ver_archivos(curso: Curso)
+    for archivo in curso.archivos:
+        print(archivo)
 
-def ver_curso(usuario: object, curso: Curso):
+
+def ver_curso(usuario: object, curso: Curso, opt_profesor: int):
     """Muestra el nombre del curso si el usuario es alumno y nombre y contraseña si el usuario es Profesor :
      Args:
         Usuario: Objeto usuario (Profesor / Estudiante).
@@ -77,9 +68,17 @@ def ver_curso(usuario: object, curso: Curso):
     Returns:
         None
     """
-    print(f"Nombre: {curso.nombre}")
-    if isinstance(usuario, Profesor):
+    if isinstance (usuario, Estudiante):
+        print(f"{curso.nombre}")
+        ver_archivos(curso)
+    else:
+        print(f"Nombre: {curso.nombre}")
+        print(f"Codigo: {curso.codigo}")
         print(f"Contraseña: {curso.contrasenia_matriculacion}")
+        if opt_profesor == 2:
+            print(f"Cantidad de archivos: {len(curso.archivos)} ")
+
+
 
 
 def listar_cursos(cursos: list, mensaje: str) -> Curso:
@@ -108,7 +107,7 @@ def listar_cursos(cursos: list, mensaje: str) -> Curso:
         return None
 
 
-def mostrar_cursos(usuario: object):
+def mostrar_cursos(usuario: object, opt_profesor: int):
     """Muestra un listado de los cursos en los que se encuentra el usuario y luego imprime la opcion deseada :
      Args:
         Usuario: Objeto usuario (Profesor / Estudiante).
@@ -118,7 +117,7 @@ def mostrar_cursos(usuario: object):
     """
     curso_seleccionado = listar_cursos(usuario.mis_cursos, "Ingrese la opción correspondiente para ver más información: ")
     if curso_seleccionado is not None:
-        ver_curso(usuario, curso_seleccionado)
+        ver_curso(usuario, curso_seleccionado, opt_profesor)
     else:
         print("No hay cursos cargados.")
 
@@ -139,7 +138,7 @@ def matricularse_curso(estudiante: Estudiante):
     Returns:
         None
     """
-    curso_seleccionado = listar_cursos(cursos, "Ingrese el curso que quiere matricularse: ")
+    curso_seleccionado = listar_cursos(estudiante.carrera.materias, "Ingrese el curso que quiere matricularse: ")
     if curso_seleccionado is not None:
         if esta_matriculado(estudiante, curso_seleccionado):
             return
@@ -152,8 +151,16 @@ def matricularse_curso(estudiante: Estudiante):
     else:
         print("No hay cursos cargados.")
 
+def desmatricular_curso(estudiante: Estudiante):
+    curso_seleccionado = listar_cursos(estudiante.mis_cursos, "Ingrese el curso del cual desea desmatricularse: ")
+    if curso_seleccionado is not None:
+        estudiante.desmatricular_curso(curso_seleccionado)
+        print("Usted se desmatriculo exitosamente!!!")
+    else:
+        print("No hay cursos cargados")
 
-def dictar_nuevo_curso(profesor: Profesor):
+
+def dictar_nuevo_curso(profesor: Profesor, opt_profesor: int):
     """Solicita un nombre para el curso a dictar y lo agrega a la lista de cursos general y los que dicta el profesor. Llama a la función ver_curso para imprimir los datos:
      Args:
         Usuario: Objeto Profesor.
@@ -167,7 +174,7 @@ def dictar_nuevo_curso(profesor: Profesor):
     cursos.append(curso)
     profesor.dictar_curso(curso)
     print("El curso ha sido ingresado correctamente !!!")
-    ver_curso(profesor, curso)
+    ver_curso(profesor, curso, opt_profesor)
 
 
 def ver_cursos_alfabeticamente():
@@ -176,11 +183,12 @@ def ver_cursos_alfabeticamente():
     Returns:
         None
     """
-    carreras_ordenadas = sorted(carreras, key=lambda carrera: carrera.nombre)
-    for carrera in carreras_ordenadas:
-        materias_ordenadas = sorted(carrera.materias, key=lambda materia: materia.nombre)
-        for materia in materias_ordenadas:
-            print(f"{materia} - {carrera}")
+    if len(cursos)>= 1:
+        cursos_ordenados = sorted(cursos, key=lambda curso: curso.nombre)
+        for curso in cursos_ordenados:
+            print(f"{curso} - Carrera: Tecnicatura Universitaria en Programación")
+    else:
+        print("Aun no hay cursos disponibles")
 
 #  -----------------------------------------------Alumno------------------------------------------------------
 
@@ -202,8 +210,10 @@ def ingreso_alumno(estudiante: Estudiante):
             if int(opt_alumno) == 1:
                 matricularse_curso(estudiante)
             elif int(opt_alumno) == 2:
-                mostrar_cursos(estudiante)
+                desmatricular_curso(estudiante)
             elif int(opt_alumno) == 3:
+                mostrar_cursos(estudiante)
+            elif int(opt_alumno) == 4:
                 respuesta = "salir"
             else:
                 print("Ingrese una opción válida.")
