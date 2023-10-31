@@ -1,10 +1,11 @@
 import os
-from datos import estudiantes, profesores, cursos
+from datos import estudiantes, profesores, carreras
 from profesor import Profesor
 from curso import Curso
 from typing import Union
 from usuario import Usuario
 from estudiante import Estudiante
+from archivo import Archivo
 
 #  -----------------------------------------------Funciones------------------------------------------------------
 
@@ -41,7 +42,6 @@ def ingreso_credenciales(usuarios: list) -> Union[bool, Usuario]:
         Union[True, Usuario]: Las credenciales ingresadas son validas.
         Union[False, Usuario]: La contraseña ingresada es incorrecta, muestra mensaje de error.
     """
-
     email = input("Ingrese su email: ")
     for usuario in usuarios:
         if usuario.email == email:
@@ -52,12 +52,25 @@ def ingreso_credenciales(usuarios: list) -> Union[bool, Usuario]:
             else:
                 print("La contraseña ingresada es incorrecta")
                 return False, usuario
-    print("El email ingresado no se encuentra registrado, debe registrarse")
+    print("El email ingresado no se encuentra registrado, debe registrarse") #si es profesor ingrese el codigo admin y que llame a la funcion dar de alta prof
+    es_profesor = input("Si es profesor ingrese el dodigo admin para darse de alta, sino presione enter")
+    if es_profesor.lower() == "admin":
+        registrar_profesor()
     return False, usuario
 
-def ver_archivos(curso: Curso)
+def ver_archivos(curso: Curso):
     for archivo in curso.archivos:
         print(archivo)
+
+def registrar_profesor():
+    nombre = input("Ingrese nombre")
+    apellido = input("Ingrese apellido")
+    email = input("Ingrese email")
+    password = input("Ingrese contra")
+    titulo = input("Ingrese titulo")
+    anio_egreso = input("ingrese anio egreso")
+
+    profesores.append(Profesor(nombre, apellido, email, password, titulo, anio_egreso))
 
 
 def ver_curso(usuario: object, curso: Curso, opt_profesor: int):
@@ -65,7 +78,7 @@ def ver_curso(usuario: object, curso: Curso, opt_profesor: int):
      Args:
         Usuario: Objeto usuario (Profesor / Estudiante).
 
-    Returns:
+    Returns:s
         None
     """
     if isinstance (usuario, Estudiante):
@@ -81,7 +94,7 @@ def ver_curso(usuario: object, curso: Curso, opt_profesor: int):
 
 
 
-def listar_cursos(cursos: list, mensaje: str) -> Curso:
+def listar_cursos(lista: list, mensaje: str) -> Curso: # Modificar esta funcion
     """Muestra un listado de los cursos y solicita el ingreso del número correspondiente a uno de ellos:
      Args:
         Cursos: Lista de cursos.
@@ -91,18 +104,18 @@ def listar_cursos(cursos: list, mensaje: str) -> Curso:
 
         None: En caso de no existir cursos
     """
-    cursos_disponibles = {}
-    if len(cursos) != 0:
-        for i, curso in enumerate(cursos, 1):
-            cursos_disponibles[str(i)] = curso
-            print(f"{i} {curso.nombre}")
+    lista_disponibles = {}
+    if len(lista) != 0:
+        for i, item in enumerate(lista, 1):
+            lista_disponibles[str(i)] = item
+            print(f"{i} {item.nombre}")
         while True:
-            opt_curso = input(mensaje)
-            if not opt_curso.isnumeric() or int(opt_curso) < 1 or int(opt_curso) > len(cursos):
+            opt_item = input(mensaje)
+            if not opt_item.isnumeric() or int(opt_item) < 1 or int(opt_item) > len(lista):
                 print("La opción ingresada es inválida")
                 continue
             break
-        return cursos_disponibles[str(opt_curso)]
+        return lista_disponibles[str(opt_item)]
     else:
         return None
 
@@ -118,6 +131,10 @@ def mostrar_cursos(usuario: object, opt_profesor: int):
     curso_seleccionado = listar_cursos(usuario.mis_cursos, "Ingrese la opción correspondiente para ver más información: ")
     if curso_seleccionado is not None:
         ver_curso(usuario, curso_seleccionado, opt_profesor)
+        if isinstance(usuario, Profesor):
+            desea_cargar = input("Desea cargar un archivo: ")
+            if desea_cargar:
+                agregar_archivo(curso_seleccionado)
     else:
         print("No hay cursos cargados.")
 
@@ -159,6 +176,17 @@ def desmatricular_curso(estudiante: Estudiante):
     else:
         print("No hay cursos cargados")
 
+def agregar_archivo(curso: Curso):
+    while True:
+        nombre = input("Ingrese el nombre del archivo: ")
+        formato = input("Ingrese el formato del archivo: ")
+        nuevo_archivo = Archivo(nombre, formato)
+        curso.nuevo_archivo(nuevo_archivo)
+        print(f"Se agrego el archivo: {nuevo_archivo}")
+        opt_archivo = input("Desea agregar otro archivo?(S/N)")
+        if opt_archivo.upper() == "N":
+            return
+
 
 def dictar_nuevo_curso(profesor: Profesor, opt_profesor: int):
     """Solicita un nombre para el curso a dictar y lo agrega a la lista de cursos general y los que dicta el profesor. Llama a la función ver_curso para imprimir los datos:
@@ -169,9 +197,9 @@ def dictar_nuevo_curso(profesor: Profesor, opt_profesor: int):
         None
     """
     nombre_curso = input("Ingrese el nombre del curso que desea dictar: ")
-    # Ver si es numero
     curso = Curso(nombre_curso)
-    cursos.append(curso)
+    carrera_seleccionada = listar_cursos(carreras, "Ingrese la carrera en el cual quiere dictar el curso: ")
+    carrera_seleccionada.materias.append(curso)
     profesor.dictar_curso(curso)
     print("El curso ha sido ingresado correctamente !!!")
     ver_curso(profesor, curso, opt_profesor)
@@ -183,12 +211,11 @@ def ver_cursos_alfabeticamente():
     Returns:
         None
     """
-    if len(cursos)>= 1:
-        cursos_ordenados = sorted(cursos, key=lambda curso: curso.nombre)
-        for curso in cursos_ordenados:
-            print(f"{curso} - Carrera: Tecnicatura Universitaria en Programación")
-    else:
-        print("Aun no hay cursos disponibles")
+    carreras_ordenadas = sorted(carreras, key=lambda carrera: carrera.nombre)
+    for carrera in carreras_ordenadas:
+        materias_ordenadas = sorted(carrera.materias, key=lambda materia: materia.nombre)
+        for materia in materias_ordenadas:
+            print(f"{materia} - {carrera}")
 
 #  -----------------------------------------------Alumno------------------------------------------------------
 
@@ -239,12 +266,12 @@ def ingreso_profesor(profesor: Profesor):
         os.system("cls")
         if opt_profesor.isnumeric():
             if int(opt_profesor) == 1:
-                dictar_nuevo_curso(profesor)
+                dictar_nuevo_curso(profesor, opt_profesor)
             elif int(opt_profesor) == 2:
-                mostrar_cursos(profesor)
+                mostrar_cursos(profesor, opt_profesor)
             elif int(opt_profesor) == 3:
                 respuesta = "salir"
-            else: 
+            else:
                 print("Ingrese una opción válida.")
         else: 
             print("Ingrese una opción numérica.")
