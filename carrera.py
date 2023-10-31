@@ -33,4 +33,6 @@ class Carrera:
         return f"Carrera: {self.nombre}"
     
     def get_cantidad_materias(self) -> int:
+        """Calcula la cantidad de materias que tiene la materia:
+    """
         return len(self.materias)

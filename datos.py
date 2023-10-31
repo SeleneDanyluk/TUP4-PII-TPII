@@ -12,24 +12,12 @@ profesores = [
     Profesor("Jorge", "Ra", "c", "d", "Profesorado de Matematicas", 1998),
 ]
 
-# cursos = [
-#     # Curso("Ingles I"),
-#     # Curso("Ingles II"),
-#     # Curso("Laboratorio I"),
-#     # Curso("Laboratorio II"),
-#     # Curso("Programacion I"),
-#     # Curso("Programacion II")
-# ]
 
 nueva_carrera = Carrera("Tecnicatura Universitaria en Programación", 2)
 
 carreras = [
     nueva_carrera
 ]
-
-nueva_carrera.materias.append(Curso("Ingles I"))
-nueva_carrera.materias.append(Curso("Programacion I"))
-
 
 estudiantes = [
     Estudiante("Jose", "Perez", "joseperez@gmail.com", "josesito1234", 54789, 2022, nueva_carrera), 

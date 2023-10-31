@@ -10,7 +10,7 @@ class Archivo:
         __formato(str): Formato del archivo.
         __fecha(date): Fecha del día de carga
     """
-    def __init__(self, nombre: str, formato: str, fecha = date.today()) -> None:
+    def __init__(self, nombre: str, formato: str) -> None:
         """
         La función __init__ iniciliza una referencia a la clase Profesor.
 
@@ -21,7 +21,7 @@ class Archivo:
         """
         self.__nombre = nombre
         self.__formato = formato
-        self.__fecha = fecha
+        self.__fecha = date.today()
 
     @property
     def nombre(self) -> str:
@@ -43,9 +43,6 @@ class Archivo:
     def fecha(self):
         return self.__fecha
 
-    @fecha.setter
-    def fecha(self, nueva_fecha):
-        self.__fecha = nueva_fecha
 
     def __str__(self) -> str:
         return f"{self.nombre}.{self.formato}"

@@ -60,11 +60,23 @@ def ingreso_credenciales(usuarios: list) -> Union[bool, Usuario]:
     return False, usuario
 
 def ver_archivos(curso: Curso):
-    print("Archivos de la materia: ")
-    for archivo in curso.archivos:
-        print(archivo)
+    """Muestra los archivos del curso seleccionado de existir alguno :
+        Args:
+         curso(Curso): objeto curso.
+        Returns:
+         None
+    """
+    if len(curso.archivos) != 0:
+        print("Archivos de la materia: ")
+        for archivo in sorted(curso.archivos, key=lambda archivo: archivo.fecha):
+            print(archivo)
 
 def registrar_profesor():
+    """Solicita el ingreso de datos del profesor y agrega el objeto a la lista de profesores :
+
+    Returns:
+        None
+    """
     nombre = input("Ingrese su nombre: ")
     apellido = input("Ingrese su apellido: ")
     email = input("Ingrese su email: ")
@@ -80,7 +92,9 @@ def registrar_profesor():
 def ver_curso(usuario: object, curso: Curso, identificador: int):
     """Muestra el nombre del curso si el usuario es alumno y nombre y contraseña si el usuario es Profesor :
      Args:
-        Usuario: Objeto usuario (Profesor / Estudiante).
+        usuario(Usuario): Objeto usuario (Profesor / Estudiante).
+        curso(Curso): objeto curso.
+        indentificador(int): numero que identifica el tipo de usuario 1 alumno, 2 profesor
 
     Returns:s
         None
@@ -144,6 +158,15 @@ def mostrar_cursos(usuario: object, identificador: int):
 
 
 def esta_matriculado(estudiante: Estudiante, curso: Curso) -> bool:
+    """Evalua si el estudiante esta matriculado en el curso:
+        Args: 
+            estudiante(Estudiante): Objeto estudiante.
+            curso(Curso): objeto curso.
+
+    Returns:
+        True: si el estudiante se encuentra matriculado.
+        False: en caso de no estar matriculado en el curso.
+    """
     for curso_estudiante in estudiante.mis_cursos:
         if curso_estudiante == curso:
             print("Usted ya se encuentra matriculado en este curso.")
@@ -154,7 +177,7 @@ def esta_matriculado(estudiante: Estudiante, curso: Curso) -> bool:
 def matricularse_curso(estudiante: Estudiante):
     """Llama a la función listar cursos y solicita el ingreso de una opción si hay cursos disponibles. Solicita la contraseña correspondiente y la valida:
      Args:
-        Usuario: Objeto Estudiante.
+        estudiante(Estudiante): Objeto Estudiante.
 
     Returns:
         None
@@ -173,6 +196,13 @@ def matricularse_curso(estudiante: Estudiante):
         print("No hay cursos cargados.")
 
 def desmatricular_curso(estudiante: Estudiante):
+    """Lista los cursos llamando a la funcion listar_cursos que devuelve el curso a desmatricularse. De ser asi lo elimina:
+     Args:
+        estudiante(Estudiante): Objeto Estudiante.
+
+    Returns:
+        None
+    """
     curso_seleccionado = listar_cursos(estudiante.mis_cursos, "Ingrese el curso del cual desea desmatricularse: ")
     if curso_seleccionado is not None:
         estudiante.desmatricular_curso(curso_seleccionado)
@@ -181,6 +211,13 @@ def desmatricular_curso(estudiante: Estudiante):
         print("Usted no posee matriculaciones activas.")
 
 def agregar_archivo(curso: Curso):
+    """Solicita los datos del archivo y agrega el objeto archivo a la lista de archivos del curso seleccionado:
+     Args:
+        curso(Curso): Objeto curso al que desea agregar el archivo.
+
+    Returns:
+        None
+    """
     while True:
         nombre = input("Ingrese el nombre del archivo: ")
         formato = input("Ingrese el formato del archivo: ")
