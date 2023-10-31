@@ -74,4 +74,4 @@ class Estudiante(Usuario):
         self.mis_cursos.append(curso)
 
     def desmatricular_curso(self, curso: Curso):
-        self.mis_cursos.pop(curso)
+        self.mis_cursos.remove(curso)

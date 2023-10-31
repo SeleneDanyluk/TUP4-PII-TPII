@@ -23,8 +23,9 @@ def menu_principal():
 
 def subMenu_alumno():
     print("1. Matricularse a un curso.")
-    print("2. Ver curso.")
-    print("3. Volver al menú principal")
+    print("2. Desmatricularse de un curso.")
+    print("3. Ver cursos.")
+    print("4. Volver al menú principal")
 
 
 def subMenu_profesor():
@@ -53,27 +54,30 @@ def ingreso_credenciales(usuarios: list) -> Union[bool, Usuario]:
                 print("La contraseña ingresada es incorrecta")
                 return False, usuario
     print("El email ingresado no se encuentra registrado, debe registrarse") #si es profesor ingrese el codigo admin y que llame a la funcion dar de alta prof
-    es_profesor = input("Si es profesor ingrese el dodigo admin para darse de alta, sino presione enter")
+    es_profesor = input("Si es profesor ingrese el código admin para darse de alta, de lo contrario presione enter: ")
     if es_profesor.lower() == "admin":
         registrar_profesor()
     return False, usuario
 
 def ver_archivos(curso: Curso):
+    print("Archivos de la materia: ")
     for archivo in curso.archivos:
         print(archivo)
 
 def registrar_profesor():
-    nombre = input("Ingrese nombre")
-    apellido = input("Ingrese apellido")
-    email = input("Ingrese email")
-    password = input("Ingrese contra")
-    titulo = input("Ingrese titulo")
-    anio_egreso = input("ingrese anio egreso")
+    nombre = input("Ingrese su nombre: ")
+    apellido = input("Ingrese su apellido: ")
+    email = input("Ingrese su email: ")
+    password = input("Ingrese una contraseña: ")
+    titulo = input("Ingrese su título: ")
+    anio_egreso = input("ingrese el año de egreso: ")
 
     profesores.append(Profesor(nombre, apellido, email, password, titulo, anio_egreso))
 
+    print("Se ha registrado correctamente.")
 
-def ver_curso(usuario: object, curso: Curso, opt_profesor: int):
+
+def ver_curso(usuario: object, curso: Curso, identificador: int):
     """Muestra el nombre del curso si el usuario es alumno y nombre y contraseña si el usuario es Profesor :
      Args:
         Usuario: Objeto usuario (Profesor / Estudiante).
@@ -81,14 +85,14 @@ def ver_curso(usuario: object, curso: Curso, opt_profesor: int):
     Returns:s
         None
     """
-    if isinstance (usuario, Estudiante):
-        print(f"{curso.nombre}")
+    if identificador == 1:
+        print(f"Materia: {curso.nombre}")
         ver_archivos(curso)
     else:
         print(f"Nombre: {curso.nombre}")
         print(f"Codigo: {curso.codigo}")
         print(f"Contraseña: {curso.contrasenia_matriculacion}")
-        if opt_profesor == 2:
+        if identificador == 2:
             print(f"Cantidad de archivos: {len(curso.archivos)} ")
 
 
@@ -120,7 +124,7 @@ def listar_cursos(lista: list, mensaje: str) -> Curso: # Modificar esta funcion
         return None
 
 
-def mostrar_cursos(usuario: object, opt_profesor: int):
+def mostrar_cursos(usuario: object, identificador: int):
     """Muestra un listado de los cursos en los que se encuentra el usuario y luego imprime la opcion deseada :
      Args:
         Usuario: Objeto usuario (Profesor / Estudiante).
@@ -130,10 +134,10 @@ def mostrar_cursos(usuario: object, opt_profesor: int):
     """
     curso_seleccionado = listar_cursos(usuario.mis_cursos, "Ingrese la opción correspondiente para ver más información: ")
     if curso_seleccionado is not None:
-        ver_curso(usuario, curso_seleccionado, opt_profesor)
+        ver_curso(usuario, curso_seleccionado, identificador)
         if isinstance(usuario, Profesor):
-            desea_cargar = input("Desea cargar un archivo: ")
-            if desea_cargar:
+            desea_cargar = input("Desea cargar un archivo? S/N: ")
+            if desea_cargar.upper() == "S":
                 agregar_archivo(curso_seleccionado)
     else:
         print("No hay cursos cargados.")
@@ -172,9 +176,9 @@ def desmatricular_curso(estudiante: Estudiante):
     curso_seleccionado = listar_cursos(estudiante.mis_cursos, "Ingrese el curso del cual desea desmatricularse: ")
     if curso_seleccionado is not None:
         estudiante.desmatricular_curso(curso_seleccionado)
-        print("Usted se desmatriculo exitosamente!!!")
+        print("Usted se desmatriculo exitosamente.")
     else:
-        print("No hay cursos cargados")
+        print("Usted no posee matriculaciones activas.")
 
 def agregar_archivo(curso: Curso):
     while True:
@@ -188,7 +192,7 @@ def agregar_archivo(curso: Curso):
             return
 
 
-def dictar_nuevo_curso(profesor: Profesor, opt_profesor: int):
+def dictar_nuevo_curso(profesor: Profesor, identificador: int):
     """Solicita un nombre para el curso a dictar y lo agrega a la lista de cursos general y los que dicta el profesor. Llama a la función ver_curso para imprimir los datos:
      Args:
         Usuario: Objeto Profesor.
@@ -198,11 +202,11 @@ def dictar_nuevo_curso(profesor: Profesor, opt_profesor: int):
     """
     nombre_curso = input("Ingrese el nombre del curso que desea dictar: ")
     curso = Curso(nombre_curso)
-    carrera_seleccionada = listar_cursos(carreras, "Ingrese la carrera en el cual quiere dictar el curso: ")
+    carrera_seleccionada = listar_cursos(carreras, "Ingrese la carrera en la cual quiere dictar el curso: ")
     carrera_seleccionada.materias.append(curso)
     profesor.dictar_curso(curso)
-    print("El curso ha sido ingresado correctamente !!!")
-    ver_curso(profesor, curso, opt_profesor)
+    print("El curso ha sido ingresado correctamente.")
+    ver_curso(profesor, curso, identificador)
 
 
 def ver_cursos_alfabeticamente():
@@ -229,6 +233,7 @@ def ingreso_alumno(estudiante: Estudiante):
         None
     """
     respuesta = ''
+    indentificador_alumno = 1
     while respuesta != "salir":
         subMenu_alumno()
         opt_alumno = input("\n Ingrese la opción de menú: ")
@@ -239,7 +244,7 @@ def ingreso_alumno(estudiante: Estudiante):
             elif int(opt_alumno) == 2:
                 desmatricular_curso(estudiante)
             elif int(opt_alumno) == 3:
-                mostrar_cursos(estudiante)
+                mostrar_cursos(estudiante, indentificador_alumno)
             elif int(opt_alumno) == 4:
                 respuesta = "salir"
             else:
@@ -260,15 +265,16 @@ def ingreso_profesor(profesor: Profesor):
         None
     """
     respuesta = ''
+    indentificador_profesor = 2
     while respuesta != "salir":
         subMenu_profesor()
         opt_profesor = input("\nIngrese la opción de menú: ")
         os.system("cls")
         if opt_profesor.isnumeric():
             if int(opt_profesor) == 1:
-                dictar_nuevo_curso(profesor, opt_profesor)
+                dictar_nuevo_curso(profesor, indentificador_profesor)
             elif int(opt_profesor) == 2:
-                mostrar_cursos(profesor, opt_profesor)
+                mostrar_cursos(profesor, indentificador_profesor)
             elif int(opt_profesor) == 3:
                 respuesta = "salir"
             else:
